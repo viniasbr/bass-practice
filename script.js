@@ -267,10 +267,19 @@ window.addEventListener('DOMContentLoaded', () => {
   const playBtn = document.getElementById('play-new');
   const hintBtn = document.getElementById('hint');
   const revealBtn = document.getElementById('reveal');
+  const selectAllBtn = document.getElementById('select-all');
   const boxes = document.querySelectorAll('#chord-options input[type=checkbox]');
+  let allSelected = false;
 
   // Initialize Audio Context only on first user interaction
   let audioInitialized = false;
+
+  // Select All functionality
+  selectAllBtn.addEventListener('click', () => {
+    allSelected = !allSelected;
+    boxes.forEach(box => box.checked = allSelected);
+    selectAllBtn.textContent = allSelected ? 'Desmarcar Todos' : 'Selecionar Todos';
+  });
 
   async function ensureAudioInitialized() {
     if (!audioInitialized) {
