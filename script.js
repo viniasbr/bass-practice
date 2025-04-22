@@ -1,12 +1,12 @@
-// 1. Chord definitions (intervals in semitones, root excluded as it's played only in bass)
+// 1. Chord definitions (intervals in semitones from root, voicings optimized)
 const CHORDS = {
-  // Triads
+  // Triads - root position works well
   maj: [4, 7],
   min: [3, 7],
   dim: [3, 6],
   aug: [4, 8],
   
-  // Seventh chords (Tetrads)
+  // Seventh chords - close position voicings
   maj7: [4, 7, 11],
   '7': [4, 7, 10],
   min7: [3, 7, 10],
@@ -17,89 +17,97 @@ const CHORDS = {
   '7b5': [4, 6, 10],
   '7#5': [4, 8, 10],
   
-  // Sixth chords
+  // Sixth chords - close position
   '6': [4, 7, 9],
   min6: [3, 7, 9],
   
-  // Add chords
-  add9: [4, 7, 14],
-  add11: [4, 7, 17],
-  add2: [2, 4, 7],
+  // Add chords - more compact voicings
+  add9: [4, 7, 2],  // 1-3-5-9 but 9 brought down an octave
+  add11: [4, 7, 5], // 1-3-5-11 but 11 brought down an octave
+  add2: [2, 4, 7],  // already compact: 1-2-3-5
   
   // Suspended seventh chords
   '7sus4': [5, 7, 10],
   '7sus2': [2, 7, 10],
   
-  // Ninth chords (Pentads)
-  '9': [4, 7, 10, 14],
-  maj9: [4, 7, 11, 14],
-  min9: [3, 7, 10, 14],
-  mMaj9: [3, 7, 11, 14],
-  '7b9': [4, 7, 10, 13],
-  '7#9': [4, 7, 10, 15],
+  // Ninth chords - more compact voicings
+  '9': [4, 7, 10, 2],      // 9th brought down
+  maj9: [4, 7, 11, 2],     // 9th brought down
+  min9: [3, 7, 10, 2],     // 9th brought down
+  mMaj9: [3, 7, 11, 2],    // 9th brought down
+  '7b9': [4, 7, 10, 1],    // b9th brought down
+  '7#9': [4, 7, 10, 3],    // #9th brought down
   
-  // Sixth-ninth chord
-  '6/9': [4, 7, 9, 14],
+  // Sixth-ninth chord - compact voicing
+  '6/9': [4, 7, 9, 2],     // 9th brought down
   
-  // Extended add chords
-  'add9-11': [4, 7, 14, 17],
-  'add9-13': [4, 7, 14, 21],
+  // Extended add chords - more compact
+  'add9-11': [4, 7, 2, 5], // 9 and 11 brought down
+  'add9-13': [4, 7, 2, 9], // 9 and 13 brought down
   
-  // Suspended ninth chords
-  '9sus4': [5, 7, 10, 14],
-  '9sus2': [2, 7, 10, 14],
+  // Suspended ninth chords - compact
+  '9sus4': [5, 7, 10, 2],  // 9th brought down
+  '9sus2': [2, 7, 10, 2],  // 9th brought down
   
-  // Altered-9th pentads
-  '7b5b9': [4, 6, 10, 13],
-  '7#5#9': [4, 8, 10, 15]
+  // Altered-9th pentads - compact
+  '7b5b9': [4, 6, 10, 1],  // b9th brought down
+  '7#5#9': [4, 8, 10, 3]   // #9th brought down
 };
 
 // 2. Load piano instrument
 let piano;
+let pianoReady = false;
 
 async function initAudio() {
-  // Create a piano synth instead of loading samples
-  piano = new Tone.Sampler({
-    urls: {
-      "A0": "A0.mp3",
-      "C1": "C1.mp3",
-      "D#1": "Ds1.mp3",
-      "F#1": "Fs1.mp3",
-      "A1": "A1.mp3",
-      "C2": "C2.mp3",
-      "D#2": "Ds2.mp3",
-      "F#2": "Fs2.mp3",
-      "A2": "A2.mp3",
-      "C3": "C3.mp3",
-      "D#3": "Ds3.mp3",
-      "F#3": "Fs3.mp3",
-      "A3": "A3.mp3",
-      "C4": "C4.mp3",
-      "D#4": "Ds4.mp3",
-      "F#4": "Fs4.mp3",
-      "A4": "A4.mp3",
-      "C5": "C5.mp3",
-      "D#5": "Ds5.mp3",
-      "F#5": "Fs5.mp3",
-      "A5": "A5.mp3",
-      "C6": "C6.mp3",
-      "D#6": "Ds6.mp3",
-      "F#6": "Fs6.mp3",
-      "A6": "A6.mp3",
-      "C7": "C7.mp3",
-      "D#7": "Ds7.mp3",
-      "F#7": "Fs7.mp3",
-      "A7": "A7.mp3",
-      "C8": "C8.mp3"
-    },
-    baseUrl: "https://tonejs.github.io/audio/salamander/",
-    onload: () => {
-      console.log("Piano samples loaded");
-    },
-    attack: 0.1,
-    release: 1.5,  // Added longer release time for smoother fade out
-    volume: -6     // Slightly reduce volume to prevent clipping
-  }).toDestination();
+  return new Promise((resolve, reject) => {
+    piano = new Tone.Sampler({
+      urls: {
+        "A0": "A0.mp3",
+        "C1": "C1.mp3",
+        "D#1": "Ds1.mp3",
+        "F#1": "Fs1.mp3",
+        "A1": "A1.mp3",
+        "C2": "C2.mp3",
+        "D#2": "Ds2.mp3",
+        "F#2": "Fs2.mp3",
+        "A2": "A2.mp3",
+        "C3": "C3.mp3",
+        "D#3": "Ds3.mp3",
+        "F#3": "Fs3.mp3",
+        "A3": "A3.mp3",
+        "C4": "C4.mp3",
+        "D#4": "Ds4.mp3",
+        "F#4": "Fs4.mp3",
+        "A4": "A4.mp3",
+        "C5": "C5.mp3",
+        "D#5": "Ds5.mp3",
+        "F#5": "Fs5.mp3",
+        "A5": "A5.mp3",
+        "C6": "C6.mp3",
+        "D#6": "Ds6.mp3",
+        "F#6": "Fs6.mp3",
+        "A6": "A6.mp3",
+        "C7": "C7.mp3",
+        "D#7": "Ds7.mp3",
+        "F#7": "Fs7.mp3",
+        "A7": "A7.mp3",
+        "C8": "C8.mp3"
+      },
+      baseUrl: "https://tonejs.github.io/audio/salamander/",
+      onload: () => {
+        console.log("Piano samples loaded");
+        pianoReady = true;
+        resolve();
+      },
+      onerror: (error) => {
+        console.error("Error loading piano samples:", error);
+        reject(error);
+      },
+      attack: 0.1,
+      release: 1.5,  // Added longer release time for smoother fade out
+      volume: -6     // Slightly reduce volume to prevent clipping
+    }).toDestination();
+  });
 }
 
 // 3. State State
@@ -107,37 +115,80 @@ let currentRootMidi = null;   // MIDI number for bass root
 let currentIntervals = null;  // selected chord intervals
 let chordRevealed = false;
 
-// 4. Utility: pick random MIDI 36 (C2)–47 (B2)
+// 4. Utility: pick random MIDI 24 (C1)–47 (B2) for bass notes
 function randomBassMidi() {
-  return 36 + Math.floor(Math.random() * 12);
+  return 24 + Math.floor(Math.random() * 24);
+}
+
+// New utility: ensure chord structure is in middle register and well-separated from bass
+function adjustChordToMiddleRegister(referenceRoot, intervals, bassNote) {
+  // Generate the actual MIDI notes for the chord
+  let notes = intervals.map(i => referenceRoot + i);
+  
+  // Check if any notes are outside our target range (C3-C4: 48-60)
+  while (notes.some(note => note > 60)) {
+    // Move entire chord structure down an octave
+    notes = notes.map(note => note - 12);
+  }
+  while (notes.some(note => note < 48)) {
+    // Move entire chord structure up an octave
+    notes = notes.map(note => note + 12);
+  }
+  
+  // Check if any chord tones are too close to the bass note
+  // If the lowest chord tone is less than an octave away from the bass, move everything up
+  const lowestChordNote = Math.min(...notes);
+  if (lowestChordNote - bassNote < 12) {
+    notes = notes.map(note => note + 12);
+  }
+  
+  return notes;
 }
 
 // 5a. Play full chord (bass + voicing)
 async function playFull() {
-  if (!piano || !currentIntervals) return;
+  if (!piano || !currentIntervals || !pianoReady) return;
   await Tone.start();
   const t = Tone.now();
+  
+  // Play bass note
   const rootNote = Tone.Frequency(currentRootMidi, 'midi').toNote();
   piano.triggerAttackRelease(rootNote, '1n', t);
-  currentIntervals.forEach(i => {
-    const note = Tone.Frequency(currentRootMidi + i + 12, 'midi').toNote();
+  
+  // Calculate reference pitch for chord (C3 = 48)
+  const referenceRoot = 48 + (currentRootMidi % 12);
+  
+  // Get adjusted chord notes, passing the bass note for spacing check
+  const chordNotes = adjustChordToMiddleRegister(referenceRoot, currentIntervals, currentRootMidi);
+  
+  // Play chord structure in middle register
+  chordNotes.forEach(midiNote => {
+    const note = Tone.Frequency(midiNote, 'midi').toNote();
     piano.triggerAttackRelease(note, '1n', t);
   });
 }
 
-// 5b. Play chord voicing only
-function playWithoutBass() {
-  if (!piano || !currentIntervals) return;
+// 5b. Play chord voicing only (without bass)
+async function playWithoutBass() {
+  if (!piano || !currentIntervals || !pianoReady) return;
   const t = Tone.now();
-  currentIntervals.forEach(i => {
-    const note = Tone.Frequency(currentRootMidi + i + 12, 'midi').toNote();
+  
+  // Calculate reference pitch for chord (C3 = 48)
+  const referenceRoot = 48 + (currentRootMidi % 12);
+  
+  // Get adjusted chord notes, passing the bass note for spacing check
+  const chordNotes = adjustChordToMiddleRegister(referenceRoot, currentIntervals, currentRootMidi);
+  
+  // Play chord structure in middle register
+  chordNotes.forEach(midiNote => {
+    const note = Tone.Frequency(midiNote, 'midi').toNote();
     piano.triggerAttackRelease(note, '1n', t);
   });
 }
 
 // 5c. Reveal bass only
-function playReveal() {
-  if (!piano || currentRootMidi === null) return;
+async function playReveal() {
+  if (!piano || currentRootMidi === null || !pianoReady) return;
   const t = Tone.now();
   const note = Tone.Frequency(currentRootMidi, 'midi').toNote();
   piano.triggerAttackRelease(note, '1n', t);
@@ -224,36 +275,56 @@ window.addEventListener('DOMContentLoaded', () => {
   async function ensureAudioInitialized() {
     if (!audioInitialized) {
       await Tone.start();
-      await initAudio();
-      audioInitialized = true;
+      try {
+        await initAudio();
+        audioInitialized = true;
+      } catch (error) {
+        console.error("Failed to initialize audio:", error);
+        alert("Erro ao carregar os sons. Por favor, recarregue a página.");
+      }
     }
   }
 
   playBtn.addEventListener('click', async () => {
-    await ensureAudioInitialized();
-    
-    if (!chordRevealed && currentRootMidi !== null) {
-      playFull();
-    } else {
-      const pool = Array.from(boxes).filter(b => b.checked).map(b => b.value);
-      if (!pool.length) { alert('Selecione pelo menos um tipo de acorde!'); return; }
-      currentIntervals = CHORDS[pool[Math.floor(Math.random() * pool.length)]];
-      currentRootMidi = randomBassMidi();
-      chordRevealed = false;
-      document.getElementById('result').textContent = '';
-      hintBtn.disabled = false;
-      revealBtn.disabled = false;
-      playFull();
+    try {
+      await ensureAudioInitialized();
+      
+      if (!chordRevealed && currentRootMidi !== null) {
+        await playFull();
+      } else {
+        const pool = Array.from(boxes).filter(b => b.checked).map(b => b.value);
+        if (!pool.length) { alert('Selecione pelo menos um tipo de acorde!'); return; }
+        currentIntervals = CHORDS[pool[Math.floor(Math.random() * pool.length)]];
+        currentRootMidi = randomBassMidi();
+        chordRevealed = false;
+        document.getElementById('result').textContent = '';
+        hintBtn.disabled = false;
+        revealBtn.disabled = false;
+        await playFull();
+      }
+    } catch (error) {
+      console.error("Error playing chord:", error);
+      alert("Erro ao tocar o acorde. Por favor, recarregue a página.");
     }
   });
 
   hintBtn.addEventListener('click', async () => {
-    await ensureAudioInitialized();
-    playWithoutBass();
+    try {
+      await ensureAudioInitialized();
+      await playWithoutBass();
+    } catch (error) {
+      console.error("Error playing hint:", error);
+      alert("Erro ao tocar o acorde. Por favor, recarregue a página.");
+    }
   });
 
   revealBtn.addEventListener('click', async () => {
-    await ensureAudioInitialized();
-    playReveal();
+    try {
+      await ensureAudioInitialized();
+      await playReveal();
+    } catch (error) {
+      console.error("Error revealing chord:", error);
+      alert("Erro ao revelar o acorde. Por favor, recarregue a página.");
+    }
   });
 });
