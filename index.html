@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exercício de Percepção de Baixo</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
+</head>
+<body onload="initAudio()">
+  <div class="container">
+    <h1>Exercício de Percepção de Baixo</h1>
+
+    <!-- Chord type selection via checkboxes -->
+    <div id="chord-options">
+      <p>Selecione os tipos de acorde:</p>
+      
+      <!-- Triads -->
+      <div class="chord-group">
+        <h3>Tríades</h3>
+        <label><input type="checkbox" value="maj"> 1-3-5</label>
+        <label><input type="checkbox" value="min"> 1-♭3-5</label>
+        <label><input type="checkbox" value="dim"> 1-♭3-♭5</label>
+        <label><input type="checkbox" value="aug"> 1-3-♯5</label>
+      </div>
+
+      <!-- Seventh chords -->
+      <div class="chord-group">
+        <h3>Tétrades com Sétima</h3>
+        <label><input type="checkbox" value="maj7"> 1-3-5-7</label>
+        <label><input type="checkbox" value="7"> 1-3-5-♭7</label>
+        <label><input type="checkbox" value="min7"> 1-♭3-5-♭7</label>
+        <label><input type="checkbox" value="m7b5"> 1-♭3-♭5-♭7</label>
+        <label><input type="checkbox" value="dim7"> 1-♭3-♭5-𝄫7</label>
+        <label><input type="checkbox" value="mMaj7"> 1-♭3-5-7</label>
+        <label><input type="checkbox" value="aug7"> 1-3-♯5-7</label>
+        <label><input type="checkbox" value="7b5"> 1-3-♭5-♭7</label>
+        <label><input type="checkbox" value="7#5"> 1-3-♯5-♭7</label>
+      </div>
+
+      <!-- Sixth chords -->
+      <div class="chord-group">
+        <h3>Acordes com Sexta</h3>
+        <label><input type="checkbox" value="6"> 1-3-5-6</label>
+        <label><input type="checkbox" value="min6"> 1-♭3-5-6</label>
+      </div>
+
+      <!-- Add chords -->
+      <div class="chord-group">
+        <h3>Acordes com Nota Adicional</h3>
+        <label><input type="checkbox" value="add9"> 1-3-5-9</label>
+        <label><input type="checkbox" value="add11"> 1-3-5-11</label>
+        <label><input type="checkbox" value="add2"> 1-2-3-5</label>
+      </div>
+
+      <!-- Suspended seventh chords -->
+      <div class="chord-group">
+        <h3>Acordes Suspensos com Sétima</h3>
+        <label><input type="checkbox" value="7sus4"> 1-4-5-♭7</label>
+        <label><input type="checkbox" value="7sus2"> 1-2-5-♭7</label>
+      </div>
+
+      <!-- Ninth chords -->
+      <div class="chord-group">
+        <h3>Acordes com Nona</h3>
+        <label><input type="checkbox" value="9"> 1-3-5-♭7-9</label>
+        <label><input type="checkbox" value="maj9"> 1-3-5-7-9</label>
+        <label><input type="checkbox" value="min9"> 1-♭3-5-♭7-9</label>
+        <label><input type="checkbox" value="mMaj9"> 1-♭3-5-7-9</label>
+        <label><input type="checkbox" value="7b9"> 1-3-5-♭7-♭9</label>
+        <label><input type="checkbox" value="7#9"> 1-3-5-♭7-♯9</label>
+      </div>
+
+      <!-- Extended chords -->
+      <div class="chord-group">
+        <h3>Acordes Estendidos</h3>
+        <label><input type="checkbox" value="6/9"> 1-3-5-6-9</label>
+        <label><input type="checkbox" value="add9-11"> 1-3-5-9-11</label>
+        <label><input type="checkbox" value="add9-13"> 1-3-5-9-13</label>
+      </div>
+
+      <!-- Suspended ninth and Altered chords -->
+      <div class="chord-group">
+        <h3>Acordes Suspensos com Nona e Alterados</h3>
+        <label><input type="checkbox" value="9sus4"> 1-4-5-♭7-9</label>
+        <label><input type="checkbox" value="9sus2"> 1-2-5-♭7-9</label>
+        <label><input type="checkbox" value="7b5b9"> 1-3-♭5-♭7-♭9</label>
+        <label><input type="checkbox" value="7#5#9"> 1-3-♯5-♭7-♯9</label>
+      </div>
+    </div>
+
+    <!-- Control buttons -->
+    <div class="buttons">
+      <button id="play-new">Tocar</button>
+      <button id="hint" disabled>Tocar Sem Baixo</button>
+      <button id="reveal" disabled>Revelar</button>
+    </div>
+
+    <!-- Display the revealed chord info -->
+    <div id="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
