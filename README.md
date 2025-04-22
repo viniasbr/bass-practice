@@ -13,8 +13,8 @@ Este é um exercício interativo para praticar a identificação de notas do bai
 
 Este projeto foi desenvolvido com assistência de programação baseada em IA. Como resultado:
 
-- A qualidade e organização do código pode não seguir as melhores práticas
+- A qualidade e organização do código não só não é garantida, como não é esperada.
 - Podem existir inconsistências ou padrões não convencionais
 - A documentação pode estar incompleta ou imprecisa
 
-Este é um projeto educacional e deve ser usado considerando essas limitações.
+Este é um protótipo educacional, construído rapidamente para resolver um problema simples.
