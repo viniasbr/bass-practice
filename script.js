@@ -125,20 +125,20 @@ function adjustChordToMiddleRegister(referenceRoot, intervals, bassNote) {
   // Generate the actual MIDI notes for the chord
   let notes = intervals.map(i => referenceRoot + i);
   
-  // Check if any notes are outside our target range (C3-C4: 48-60)
-  while (notes.some(note => note > 60)) {
-    // Move entire chord structure down an octave
-    notes = notes.map(note => note - 12);
-  }
-  while (notes.some(note => note < 48)) {
-    // Move entire chord structure up an octave
-    notes = notes.map(note => note + 12);
-  }
+  // Adjust individual notes that fall outside D3-G4 range (MIDI 50-67)
+  notes = notes.map(note => {
+    while (note > 67) { // Above G4
+      note -= 12;
+    }
+    while (note < 50) { // Below D3
+      note += 12;
+    }
+    return note;
+  });
   
-  // Check if any chord tones are too close to the bass note
-  // If the lowest chord tone is less than an octave away from the bass, move everything up
-  const lowestChordNote = Math.min(...notes);
-  if (lowestChordNote - bassNote < 12) {
+  // Check if ANY chord tone is too close to the bass note
+  // If so, move the ENTIRE chord up an octave
+  if (notes.some(note => note - bassNote < 12)) {
     notes = notes.map(note => note + 12);
   }
   
