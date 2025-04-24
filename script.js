@@ -1,5 +1,10 @@
 // 1. Chord definitions (intervals in semitones from root, voicings optimized)
 const CHORDS = {
+  // Dyads
+  maj3: [4],
+  min3: [3],
+  fifth: [7],
+  
   // Triads - root position works well
   maj: [4, 7],
   min: [3, 7],
@@ -199,6 +204,11 @@ async function playReveal() {
 
 function getChordName(intervals) {
   const mapping = {
+    // Dyads
+    maj3: '1-3',
+    min3: '1-♭3',
+    fifth: '1-5',
+    
     // Triads
     maj: '1-3-5',
     min: '1-♭3-5',
