@@ -1,8 +1,38 @@
+:root[data-theme="light"] {
+  --bg-color: #fff;
+  --text-color: #333;
+  --card-bg: #f5f5f5;
+  --card-inner-bg: white;
+  --border-color: #eee;
+  --hover-color: #eef;
+  --button-bg: #4CAF50;
+  --button-hover: #45a049;
+  --button-text: white;
+  --disabled-bg: #cccccc;
+  --shadow-color: rgba(0,0,0,0.1);
+}
+
+:root[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --card-bg: #2d2d2d;
+  --card-inner-bg: #363636;
+  --border-color: #404040;
+  --hover-color: #404040;
+  --button-bg: #45a049;
+  --button-hover: #4CAF50;
+  --button-text: white;
+  --disabled-bg: #404040;
+  --shadow-color: rgba(0,0,0,0.3);
+}
+
 body {
   font-family: sans-serif;
   margin: 0;
   padding: 20px;
   min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .container {
@@ -12,15 +42,32 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 12px;
+  font-size: 1.2em;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
 h1 {
   text-align: center;
-  color: #333;
+  color: var(--text-color);
 }
 
 #chord-options {
   margin: 20px 0;
   padding: 15px;
-  background: #f5f5f5;
+  background: var(--card-bg);
   border-radius: 8px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -34,22 +81,22 @@ h1 {
 #chord-options p {
   margin: 0 0 15px 0;
   font-size: 1.1em;
-  color: #333;
+  color: var(--text-color);
 }
 
 .chord-group {
   margin-bottom: 0;
   padding: 10px;
-  background: white;
+  background: var(--card-inner-bg);
   border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px var(--shadow-color);
 }
 
 .chord-group h3 {
   margin: 0 0 10px 0;
-  color: #444;
+  color: var(--text-color);
   font-size: 1em;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 5px;
 }
 
@@ -57,7 +104,7 @@ label {
   display: inline-block;
   margin: 5px 10px;
   padding: 3px 8px;
-  background: #f9f9f9;
+  background: var(--card-bg);
   border-radius: 4px;
   font-size: 0.9em;
   cursor: pointer;
@@ -65,7 +112,7 @@ label {
 }
 
 label:hover {
-  background: #eef;
+  background: var(--hover-color);
 }
 
 input[type="checkbox"] {
@@ -82,27 +129,27 @@ button {
   padding: 10px 20px;
   font-size: 1em;
   cursor: pointer;
-  background: #4CAF50;
-  color: white;
+  background: var(--button-bg);
+  color: var(--button-text);
   border: none;
   border-radius: 4px;
   transition: background-color 0.2s;
 }
 
 button:hover {
-  background: #45a049;
+  background: var(--button-hover);
 }
 
 button:disabled {
-  background: #cccccc;
+  background: var(--disabled-bg);
   cursor: not-allowed;
 }
 
 .small-button {
   padding: 5px 10px;
   font-size: 0.9em;
-  background: #4CAF50;
-  color: white;
+  background: var(--button-bg);
+  color: var(--button-text);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -110,7 +157,7 @@ button:disabled {
 }
 
 .small-button:hover {
-  background: #45a049;
+  background: var(--button-hover);
 }
 
 #result {
@@ -118,5 +165,5 @@ button:disabled {
   margin-top: 20px;
   font-size: 1.2em;
   min-height: 30px;
-  color: #333;
+  color: var(--text-color);
 }

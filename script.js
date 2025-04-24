@@ -272,8 +272,26 @@ function getChordName(intervals) {
   return '';
 }
 
+// Theme handling
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+}
+
 // 6. UI wiring
 window.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+  });
+
   const playBtn = document.getElementById('play-new');
   const hintBtn = document.getElementById('hint');
   const revealBtn = document.getElementById('reveal');
